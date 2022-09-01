@@ -9,11 +9,11 @@ public class Tile : MonoBehaviour
     public TextMeshPro nameText;
     public TextMeshPro priceText;
     public GameObject centerObj;
-    private TileInfo _tileInfo;
+    public TileInfo tileInfo;
 
     public void SetTileInfo(TileInfo info){
         if (info == null) return;
-        _tileInfo = info;
+        tileInfo = info;
         SetType();
     }
 
@@ -26,7 +26,7 @@ public class Tile : MonoBehaviour
     private void SetType()
     {
         if (colorMesh == null) return;
-        if(_tileInfo.tileType == TileType.Special)
+        if(tileInfo.tileType == TileType.Special)
         {
             colorMesh.SetActive(false);
         }
@@ -40,14 +40,14 @@ public class Tile : MonoBehaviour
     private void SetTexts()
     {
         if (nameText != null)
-            nameText.SetText(_tileInfo.Name);
-        if (priceText != null && _tileInfo.HasPrice)
+            nameText.SetText(tileInfo.Name);
+        if (priceText != null && tileInfo.HasPrice)
         {
             priceText.gameObject.SetActive(true);
-            priceText.SetText($"{_tileInfo.Price}$");
+            priceText.SetText($"{tileInfo.Price}$");
         }
 
-        if (_tileInfo.tileType == TileType.Special)
+        if (tileInfo.tileType == TileType.Special)
         {
             Vector3 pos = nameText.transform.localPosition;
             pos.z -= 0.2f;
@@ -59,7 +59,7 @@ public class Tile : MonoBehaviour
     {
         var tempMaterial = new Material(colorMesh.GetComponent<Renderer>().sharedMaterial);
         Color color;
-        switch (_tileInfo.Color)
+        switch (tileInfo.Color)
         {
             case TileColor.Red:
                 ColorUtility.TryParseHtmlString("#FF0000FF", out color); break;

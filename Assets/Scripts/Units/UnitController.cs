@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class UnitController : MonoBehaviour
 {
     [SerializeField]
@@ -18,22 +18,27 @@ public class UnitController : MonoBehaviour
     public bool restore = false;
     //-------------------------
 
+    //Прямой реф на Инфу пока что
+    public UnitInfo _unitInfo;
+
     private sBoard board;
-    private UnitInfo _unitInfo;
     private Vector3 _startPos = new Vector3(1.6f, 0.5f, 1.1f);
 
     public void Start()
     {
         board = gameBoard.GetComponent<sBoard>();
-        var units = new List<UnitInfo>(Resources.FindObjectsOfTypeAll<UnitInfo>());
-        foreach(var unit in units)
-        {
-            if(ID == unit.ID)
-            {
-                SetUnitInfo(unit);
-                break;
-            }
-        }
+
+        //Можем позволить себе убрать дрочь на ресурсы
+        //var units = new List<UnitInfo>(Resources.FindObjectsOfTypeAll<UnitInfo>());
+        //foreach(var unit in units)
+        //{
+        //    if(ID == unit.ID)
+        //    {
+        //        SetUnitInfo(unit);
+        //        break;
+        //    }
+        //}
+        SetUnitInfo(_unitInfo);
     }
 
     public void Update()

@@ -2,23 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class sBoard : MonoBehaviour
 {
     public GameObject board;
-    public GameObject cornerTilePref;
-    public GameObject tilePref;
+    public Tile cornerTilePref;
+    public Tile tilePref;
 
     public bool active;
 
-    private List<GameObject> _tileObjects = new List<GameObject>();
-    private List<TileInfo> _tileinfoFiles;
+    [SerializeField]
+    private BoardInfo _boardInfo;
+    private List<Tile> _tileObjects = new List<Tile>();
 
     public Vector3 GetTileCenter(int index)
     {
         if (index < 0 || index > _tileObjects.Count) return new Vector3(0, 0, 0);
-        var scr = Vector3.zero;
+        //Берем позицыю тайла + поднимаем вверх
+        var scr = GetTile(index).transform.position + Vector3.up * 0.5f;
         return scr;
+    }
+
+    //Новый метод выбора тайла по айдишнику
+    public Tile GetTile(int id)
+    {
+        //var tile = _tileObjects.Find(x => x.tileInfo.ID == id);
+
+        //Находим тайл по его айдишнику а не индексу в массиве
+        foreach (var tile in _tileObjects)
+        {
+            if (tile.tileInfo.ID == id) return tile;
+        }
+
+        return null;
+    }
+
+    private void Start()
+    {
+        active = true;
     }
 
     private void Update()
@@ -30,8 +51,7 @@ public class sBoard : MonoBehaviour
             DestroyImmediate(transform.GetChild(i).gameObject);
         }
         _tileObjects.Clear();
-        _tileinfoFiles = new List<TileInfo>(Resources.FindObjectsOfTypeAll<TileInfo>());
-        Debug.Log(_tileinfoFiles.Count);
+        Debug.Log(_boardInfo._tileInfos.Count);
         GenerateBoard();
 
         active = false;
@@ -118,9 +138,9 @@ public class sBoard : MonoBehaviour
         }
     }
 
-    private GameObject CreateTile(TileType type, Vector3 pos, Vector3 rot)
+    private Tile CreateTile(TileType type, Vector3 pos, Vector3 rot)
     {
-        GameObject tile;
+        Tile tile;
         if(type == TileType.Corner)
             tile = Instantiate(cornerTilePref, board.transform);
         else
@@ -130,16 +150,11 @@ public class sBoard : MonoBehaviour
         tile.transform.Rotate(rot);
         var scr = tile.GetComponent<Tile>();
 
-        TileInfo trueFile = null;
-        foreach(var item in _tileinfoFiles)
-        {
-            if(item.ID == _tileObjects.Count)
-            {
-                trueFile = item;
-                break;
-            }
-        }
-        scr.SetTileInfo(trueFile);
+        var tileInfo = _boardInfo.GetTileByID(_tileObjects.Count);
+
+        if(tileInfo != null)
+            scr.SetTileInfo(tileInfo);
+
         return tile;
     }
 }
