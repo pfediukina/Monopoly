@@ -5,10 +5,9 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class UnitController : MonoBehaviour
 {
-    [SerializeField]
     public int ID;
-    [SerializeField]
     public GameObject gameBoard;
+<<<<<<< Updated upstream
 
 
     //------------------------------
@@ -35,20 +34,19 @@ public class UnitController : MonoBehaviour
             }
         }
     }
+=======
+    public UnitInfo _unitInfo;
 
-    public void Update()
+    private sBoard board;
+    //---------------------
+    private List<GameObject> _lines;
+>>>>>>> Stashed changes
+
+    public void InitPlayer(sBoard newBoard)
     {
-        if (move)
-        {
-            move = false;
-            Move(step);             
-        }
-        if (restore)
-        {
-            restore = false;
-            transform.position = board.GetTileCenter(0);
-            _unitInfo.position = 0;        
-        }
+        board = newBoard;
+        transform.position = board.GetTileCenter(0);
+        _unitInfo.position = 0;
     }
 
     public void SetUnitInfo(UnitInfo info)
@@ -59,42 +57,15 @@ public class UnitController : MonoBehaviour
 
     public void Move(int step)
     {
-        Vector3 lastPoint;
-        int lastIndex = _unitInfo.position;
-        float time = 1;
-        for (int i = 1; i <= step; i++)
+        
+        int _endPos = _unitInfo.position + step;
+        int _startPos = _unitInfo.position;
+        for(int i = _startPos; i <= _endPos; i++)
         {
-            lastIndex = (_unitInfo.position + 1) % 40;
-            lastPoint = board.GetTileCenter(lastIndex);
-            Debug.Log(Vector3.Lerp(board.GetTileCenter(_unitInfo.position), lastPoint, time));
-            transform.position = lastPoint;
+            _unitInfo.position = i;
+            transform.position = board.GetTileCenter(_unitInfo.position);
         }
-        _unitInfo.position = lastIndex;
+        //Debug.Log("Pos: " + _startPos + "/" + _unitInfo.position);
+        _unitInfo.position = _unitInfo.position % 40;
     }
-
-    //private Vector3 GetOffset()
-    //{
-    //    Vector3 offset = new Vector3(0, 0, 0);
-    //    if (_unitInfo.position > 0 && _unitInfo.position < 10)
-    //    {
-    //        offset.x = stepSize;
-    //        offset.z = 0;
-    //    }
-    //    else if (_unitInfo.position >= 10 && _unitInfo.position < 20)
-    //    {
-    //        offset.x = 0;
-    //        offset.z = -stepSize;
-    //    }
-    //    else if (_unitInfo.position >= 20 && _unitInfo.position < 30)
-    //    {
-    //        offset.x = -stepSize;
-    //        offset.z = 0;
-    //    }
-    //    else
-    //    {
-    //        offset.x = 0;
-    //        offset.z = stepSize;
-    //    }
-    //    return offset;
-    //}
 }

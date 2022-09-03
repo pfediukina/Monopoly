@@ -9,32 +9,59 @@ public class sBoard : MonoBehaviour
     public GameObject cornerTilePref;
     public GameObject tilePref;
 
-    public bool active;
+    public bool update;
 
     private List<GameObject> _tileObjects = new List<GameObject>();
     private List<TileInfo> _tileinfoFiles;
 
     public Vector3 GetTileCenter(int index)
     {
+<<<<<<< Updated upstream
         if (index < 0 || index > _tileObjects.Count) return new Vector3(0, 0, 0);
         var scr = Vector3.zero;
         return scr;
     }
 
     private void Update()
+=======
+        var i = index;
+        if (i < 0 || i >= _tileObjects.Count)
+        {
+            i = Mathf.Abs(i) % 40;
+        }
+        Debug.Log("Index: " +i + "/" + _tileObjects.Count);
+        var scr = GetTile(i).transform.position + Vector3.up * 0.5f;
+        return scr;
+    }
+    //Новый метод выбора тайла по айдишнику
+    public Tile GetTile(int id)
     {
-        if (!active) return;
-        
-        for(int i = transform.childCount - 1; i >= 0; i--)
+        //var tile = _tileObjects.Find(x => x.tileInfo.ID == id);
+
+        //Находим тайл по его айдишнику а не индексу в массиве
+        foreach (var tile in _tileObjects)
+        {
+            if (tile.tileInfo.ID == id) return tile;
+        }
+
+        return null;
+    }
+
+    public sBoard InitBoard()
+>>>>>>> Stashed changes
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
             DestroyImmediate(transform.GetChild(i).gameObject);
         }
         _tileObjects.Clear();
+<<<<<<< Updated upstream
         _tileinfoFiles = new List<TileInfo>(Resources.FindObjectsOfTypeAll<TileInfo>());
         Debug.Log(_tileinfoFiles.Count);
+=======
+>>>>>>> Stashed changes
         GenerateBoard();
-
-        active = false;
+        return this;
     }
 
     private void GenerateBoard()

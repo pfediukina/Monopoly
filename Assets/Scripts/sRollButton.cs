@@ -9,6 +9,11 @@ public class sRollButton : MonoBehaviour
     [SerializeField]
     public Button rollButt;
     public TextMeshPro textMesh;
+    public UnitController player;
+
+
+    private int _num1 = 0;
+    private int _num2 = 0;
 
     private void Start()
     {
@@ -17,9 +22,11 @@ public class sRollButton : MonoBehaviour
     }
 
     void TaskOnClick()
-    {
-        string text = $"{Random.Range(1, 7).ToString()} {Random.Range(1, 6).ToString()}";
+    {  
+        _num1 = Random.Range(1, 6);
+        _num2 = Random.Range(1, 6);
+        string text = $"{_num1.ToString()} {_num2.ToString()}";
         textMesh.text = text;
+        player.Move(_num1 + _num2);
     }
-
 }

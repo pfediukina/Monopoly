@@ -3,7 +3,12 @@ guid: 4560ae3611fc06647979ba1bf945d1f9
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WoodenChessPawnSideBMat
+    second: {fileID: 2100000, guid: ab146e27ebe1bdd459d7d8ff7428e906, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
