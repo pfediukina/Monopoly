@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[ExecuteInEditMode]
-public class sBoard : MonoBehaviour
+[ExecuteInEditMode]
+public class Board : MonoBehaviour
 {
     public GameObject board;
     public Tile cornerTilePref;
@@ -15,46 +15,43 @@ public class sBoard : MonoBehaviour
     private BoardInfo _boardInfo;
     private List<Tile> _tileObjects = new List<Tile>();
 
-    public Vector3 GetTileCenter(int index)
-    {
-        if (index < 0 || index > _tileObjects.Count) return new Vector3(0, 0, 0);
-        //Берем позицыю тайла + поднимаем вверх
-        var scr = GetTile(index).transform.position + Vector3.up * 0.5f;
-        return scr;
-    }
-
-    //Новый метод выбора тайла по айдишнику
-    public Tile GetTile(int id)
-    {
-        //var tile = _tileObjects.Find(x => x.tileInfo.ID == id);
-
-        //Находим тайл по его айдишнику а не индексу в массиве
-        foreach (var tile in _tileObjects)
-        {
-            if (tile.tileInfo.ID == id) return tile;
-        }
-
-        return null;
-    }
-
-    private void Start()
-    {
-        active = true;
-    }
-
     private void Update()
     {
-        if (!active) return;
-        
-        for(int i = transform.childCount - 1; i >= 0; i--)
+        if(active)
+        {
+            Init();
+            active = false;
+        }    
+    }
+
+    public void Init()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
         {
             DestroyImmediate(transform.GetChild(i).gameObject);
         }
         _tileObjects.Clear();
-        Debug.Log(_boardInfo._tileInfos.Count);
         GenerateBoard();
+    }
 
-        active = false;
+    public Vector3 GetTileCenter(int index)
+    {
+        var i = index;
+        if (index < 0 || index > _tileObjects.Count)
+        {
+            i = Mathf.Abs(index) % 40;
+        }
+        var scr = GetTile(i).transform.position + Vector3.up * 0.5f;
+        return scr;
+    }
+   
+    public Tile GetTile(int id)
+    {
+        foreach (var tile in _tileObjects)
+        {
+            if (tile.tileInfo.ID == id) return tile;
+        }
+        return null;
     }
 
     private void GenerateBoard()

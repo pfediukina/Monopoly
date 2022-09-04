@@ -8,8 +8,23 @@ public class Tile : MonoBehaviour
     public GameObject colorMesh;
     public TextMeshPro nameText;
     public TextMeshPro priceText;
-    public GameObject centerObj;
+    public GameObject playerCube;
     public TileInfo tileInfo;
+
+    public void SetPlayer(UnitController player)
+    {
+        if(player == null)
+        {
+            ShowPlayerCube(false);
+            return;
+        }
+        ShowPlayerCube(true);
+    }
+
+    private void ShowPlayerCube(bool active) //private in future (called from SetPlayer())
+    {
+        playerCube.gameObject.SetActive(active);
+    }
 
     public void SetTileInfo(TileInfo info){
         if (info == null) return;
@@ -17,11 +32,6 @@ public class Tile : MonoBehaviour
         SetType();
     }
 
-    public Vector3 GetCenter()
-    {
-        Vector3 cen = centerObj.transform.position;
-        return cen;
-    }
 
     private void SetType()
     {
@@ -44,7 +54,7 @@ public class Tile : MonoBehaviour
         if (priceText != null && tileInfo.HasPrice)
         {
             priceText.gameObject.SetActive(true);
-            priceText.SetText($"{tileInfo.Price}$");
+            priceText.SetText($"{Mathf.Abs(tileInfo.Price)}$");
         }
 
         if (tileInfo.tileType == TileType.Special)
