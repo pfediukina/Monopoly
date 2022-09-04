@@ -39,8 +39,11 @@ public class Board : MonoBehaviour
         var i = index;
         if (index < 0 || index > _tileObjects.Count)
         {
-            i = Mathf.Abs(index) % 40;
+            i = Mathf.Abs(index) % _tileObjects.Count;
+            if (i == _tileObjects.Count)
+                i = 0;
         }
+        Debug.Log($"{i}/{_tileObjects.Count}");
         var scr = GetTile(i).transform.position + Vector3.up * 0.5f;
         return scr;
     }
