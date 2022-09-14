@@ -15,6 +15,8 @@ MonoBehaviour:
   ID: 12
   Name: ELECTRIC COMPANY
   tileType: 1
+  specialType: 6
   Color: 6
   HasPrice: 1
   Price: 150
+  owningPlayer: {fileID: 0}

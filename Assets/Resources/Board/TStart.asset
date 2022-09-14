@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: TStart
   m_EditorClassIdentifier: 
   ID: 0
-  Name: 0
+  Name: Start
   tileType: 0
-  color: 0
+  Color: 0
+  HasPrice: 0
+  Price: 0
+  owningPlayer: {fileID: 0}

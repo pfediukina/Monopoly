@@ -15,6 +15,8 @@ MonoBehaviour:
   ID: 5
   Name: FENCHURCH ST. STATION
   tileType: 1
+  specialType: 3
   Color: 4
   HasPrice: 1
   Price: 200
+  owningPlayer: {fileID: 0}

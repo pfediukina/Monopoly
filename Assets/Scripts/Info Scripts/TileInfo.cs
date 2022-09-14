@@ -12,9 +12,13 @@ public class TileInfo : ScriptableObject
     [SerializeField]
     public TileType tileType;
     [SerializeField]
+    public SpecialTile specialType;
+    [SerializeField]
     public TileColor Color;
     [SerializeField]   
     public bool HasPrice = true;
     [SerializeField]
     public int Price;
+    [SerializeField]
+    public UnitController owningPlayer;
 }

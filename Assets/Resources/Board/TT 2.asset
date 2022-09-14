@@ -15,6 +15,8 @@ MonoBehaviour:
   ID: 2
   Name: COMMUNITY CHEST
   tileType: 1
+  specialType: 5
   Color: 4
   HasPrice: 0
   Price: 0
+  owningPlayer: {fileID: 0}

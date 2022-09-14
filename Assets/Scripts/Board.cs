@@ -37,24 +37,32 @@ public class Board : MonoBehaviour
     public Vector3 GetTileCenter(int index)
     {
         var i = index;
-        if (index < 0 || index > _tileObjects.Count)
+        if (index < 0 || index >= _tileObjects.Count)
         {
-            i = Mathf.Abs(index) % _tileObjects.Count;
-            if (i == _tileObjects.Count)
-                i = 0;
+            i = Mathf.Abs(index) % 40;
         }
-        Debug.Log($"{i}/{_tileObjects.Count}");
         var scr = GetTile(i).transform.position + Vector3.up * 0.5f;
         return scr;
     }
    
     public Tile GetTile(int id)
     {
+        var i = id;
+        if (id < 0 || id >= _tileObjects.Count)
+        {
+            i = Mathf.Abs(id) % 40;
+        }
         foreach (var tile in _tileObjects)
         {
-            if (tile.tileInfo.ID == id) return tile;
+
+            if (tile.tileInfo.ID == i) return tile;
         }
         return null;
+    }
+    public List<Tile> GetTiles()
+    {
+        var list = new List<Tile>(_tileObjects);
+        return list;
     }
 
     private void GenerateBoard()
@@ -73,7 +81,7 @@ public class Board : MonoBehaviour
 
         pos.x += 9*tilePref.transform.localScale.x + 0.25f;
         _tileObjects.Add(
-            CreateTile(TileType.Corner, pos, Vector3.zero));
+            CreateTile(TileType.Corner, pos, new Vector3(0, 90, 0)));
 
         pos.z -= cornerTilePref.transform.localScale.x - 0.25f;
         rot.y = 90;
@@ -83,7 +91,7 @@ public class Board : MonoBehaviour
 
         pos.z += (9 * tilePref.transform.localScale.x + 0.25f) * -1;
         _tileObjects.Add(
-            CreateTile(TileType.Corner, pos, Vector3.zero));
+            CreateTile(TileType.Corner, pos, new Vector3(0, 180, 0)));
 
         pos.x -= cornerTilePref.transform.localScale.x - 0.25f;
         rot.y = 180;
@@ -93,7 +101,7 @@ public class Board : MonoBehaviour
 
         pos.x = 0;
         _tileObjects.Add(
-            CreateTile(TileType.Corner, pos, Vector3.zero));
+            CreateTile(TileType.Corner, pos, new Vector3(0, 270, 0)));
 
         pos.z += cornerTilePref.transform.localScale.x - 0.25f;
         rot.y = 270;

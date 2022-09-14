@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: TTax
   m_EditorClassIdentifier: 
   ID: 20
-  Name: 2
+  Name: Tax
   tileType: 0
+  specialType: 2
   Color: 5
   HasPrice: 1
   Price: 0
+  owningPlayer: {fileID: 0}

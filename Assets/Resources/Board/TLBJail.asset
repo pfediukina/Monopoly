@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: TLBJail
   m_EditorClassIdentifier: 
   ID: 30
-  Name: 2
+  Name: Jail
   tileType: 0
-  color: 1
+  specialType: 1
+  Color: 0
+  HasPrice: 1
+  Price: 0
+  owningPlayer: {fileID: 0}

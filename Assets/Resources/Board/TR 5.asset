@@ -15,6 +15,8 @@ MonoBehaviour:
   ID: 15
   Name: MARYLEBONE STATION
   tileType: 1
+  specialType: 3
   Color: 0
   HasPrice: 1
   Price: 200
+  owningPlayer: {fileID: 0}

@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059f8f849eeff5a419768c1c51a5fdd6, type: 3}
   m_Name: Player1
   m_EditorClassIdentifier: 
-  ID: 0
-  position: 0
+  ID: 1
+  position: 35
+  money: 1242
+  offset: 0
+  color: {r: 0, g: 0.97121596, b: 1, a: 1}

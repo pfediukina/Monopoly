@@ -9,14 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0035f6b6a5c8b84eb1d58b7ab398b7e, type: 3}
-  m_Name: TL 5
+  m_Script: {fileID: 11500000, guid: 059f8f849eeff5a419768c1c51a5fdd6, type: 3}
+  m_Name: Player3
   m_EditorClassIdentifier: 
-  ID: 35
-  Name: LIVERPOOL ST. STATION
-  tileType: 1
-  specialType: 3
-  Color: 0
-  HasPrice: 1
-  Price: 200
-  owningPlayer: {fileID: 0}
+  ID: 0
+  position: 10
+  money: 1290
+  offset: 0
+  color: {r: 0, g: 1, b: 0, a: 1}

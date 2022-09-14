@@ -7,26 +7,34 @@ public class UnitController : MonoBehaviour
 {
     [SerializeField]
     public int ID;
+    public CameraFollow newCamera;
+    public UnitInfo Info;
+    public List<GameObject> Meshes;
 
-    public UnitInfo _unitInfo;
+    private UnitInfo _unitInfo;
+    private Board _board;
+    private UnitMovement _movement;
 
-    private Board board;
-    private Vector3 _startPos = new Vector3(1.6f, 0.5f, 1.1f);
+    public void Move(int step) { _movement.Move(step); }
 
-    public void Start()
+    public void Init(Board gameBoard)
     {
+        _unitInfo = Info;
+        _board = gameBoard;
 
-        //ћожем позволить себе убрать дрочь на ресурсы
-        //var units = new List<UnitInfo>(Resources.FindObjectsOfTypeAll<UnitInfo>());
-        //foreach(var unit in units)
-        //{
-        //    if(ID == unit.ID)
-        //    {
-        //        SetUnitInfo(unit);
-        //        break;
-        //    }
-        //}
-        SetUnitInfo(_unitInfo);
+        ResetPlayer();
+        _movement = GetComponent<UnitMovement>();
+        _movement.Init(gameBoard, this);
+        _movement.Move(0);
+        newCamera.RotateCameraBySide(38, 0);
+        
+    }
+
+    private void ResetPlayer()
+    {
+        _unitInfo.position = 0;
+        _unitInfo.money = 1500;
+        _unitInfo.jail = 0;
     }
 
     public UnitInfo GetUnitInfo()
@@ -34,23 +42,22 @@ public class UnitController : MonoBehaviour
         return _unitInfo;
     }
 
-    public void Init(Board gameBoard)
-    {
-        board = gameBoard;
-        transform.position = board.GetTileCenter(0);
-        _unitInfo.position = 0;
-    }
-
     public void SetUnitInfo(UnitInfo info)
     {
         if (info == null) return;
-        _unitInfo = info;  
+        _unitInfo = info;
+        foreach (var mesh in Meshes)
+        {
+            var tempMaterial = new Material(mesh.GetComponent<Renderer>().sharedMaterial);
+
+            Color color = _unitInfo.color;
+            tempMaterial.color = color;
+            mesh.GetComponent<Renderer>().sharedMaterial = tempMaterial;
+        }
     }
 
-    public void Move(int step)
+    public void SetCameraActive(bool active)
     {
-        int lastPos = _unitInfo.position + step;
-        transform.position = board.GetTileCenter(lastPos);
-        _unitInfo.position = lastPos % 40;
+        newCamera.gameObject.SetActive(active);
     }
 }
