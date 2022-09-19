@@ -7,7 +7,7 @@ using TMPro;
 public class DialogBuilder: MonoBehaviour
 {
     [Header("Components")]
-    [SerializeField] private GameObject messageBox;
+    [SerializeField] private CanvasGroup messageBox;
 
     [SerializeField] private TextMeshProUGUI captionText;
     [SerializeField] private TextMeshProUGUI infoText;
@@ -16,7 +16,7 @@ public class DialogBuilder: MonoBehaviour
 
     public void BuildMessageDialog( string caption, string info, string button_1, string button_2)
     {
-        messageBox.SetActive(true);
+        messageBox.alpha = 1;
         captionText.text = caption;
         infoText.text = info;
         button1.text = button_1;
@@ -26,7 +26,7 @@ public class DialogBuilder: MonoBehaviour
 
     public void HideMessageDialog()
     {
-        messageBox.SetActive(false);
+        messageBox.alpha = 0;
     }
 
 }
