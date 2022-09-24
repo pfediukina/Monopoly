@@ -11,4 +11,5 @@ public class TileInfo : ScriptableObject
     [SerializeField] public int Price;
     [SerializeField] public Color Color;
     [SerializeField] public UnitController Owner;
+    [SerializeField] public int[] Rent;
 }

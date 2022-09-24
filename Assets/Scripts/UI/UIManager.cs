@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button button1;
     [SerializeField] private Button button2;
     [SerializeField] private Button buttonRoll;
+
 
     private DialogID currentDialog;
 
@@ -26,17 +28,22 @@ public class UIManager : MonoBehaviour
         {
             OnPlayerPressedButton(button2);
         });
-
         buttonRoll.onClick.AddListener(OnPlayerRoll);
+
     }
 
     public void ShowPlayerDialog(UnitController player_id, DialogID dialog_id, string caption, string info, string button_1, string button_2)
     {
         currentDialog = dialog_id;
-        if(dialog_id == DialogID.Rent)
+        if(dialog_id != DialogID.List)
         {
+            button2.gameObject.SetActive(true);
             dialogBuilder.BuildMessageDialog(caption, info, button_1, button_2);
             buttonRoll.interactable = false;
+            if(button_2 == "")
+            {
+                button2.gameObject.SetActive(false);
+            }
         }
     }
 

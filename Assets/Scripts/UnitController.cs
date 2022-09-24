@@ -12,6 +12,7 @@ public class UnitController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private GameObject unitMesh;
+    [SerializeField] private Camera unitCamera;
 
     //[Header("Test")]
     //[SerializeField] private int playerPos = -1;
@@ -69,9 +70,14 @@ public class UnitController : MonoBehaviour
         Tile new_tile = board.GetAllTiles()[new_pos];
         MovePlayerToTile(new_tile);
     }
+    public void SetPlayerActive(bool active)
+    {
+        unitCamera.gameObject.SetActive(active);
+    }
 
     private void ResetPlayerInfo()
     {
-        //unitInfo.Position = examplaryInfo.Position;
+        unitInfo.Jail = examplaryInfo.Jail;
     }
+
 }

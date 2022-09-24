@@ -1,15 +1,19 @@
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
 public class Tile : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private TileInfo tileInfo;
     [SerializeField] private TileBuilder tileBuilder;
 
     [Header("Test Mode")]
     [SerializeField] private bool update;
+
+    private int tile_rent = 0; // - or +
 
     private void Update()
     {
@@ -42,16 +46,32 @@ public class Tile : MonoBehaviour
         tileBuilder.SetTileColor(tileInfo.Color, is_colored);
     }
 
-    public DialogInfo OnPlayerAtTile(UnitController player)
+    public int GetPlayerRent()
     {
-        DialogInfo d_info = new DialogInfo();
-        if(tileInfo.Type == TileType.Colored)
+        return tile_rent;
+    }
+
+    public void SetOwner(UnitController player)
+    {
+        if (player != null)
         {
-            d_info.Caption = tileInfo.Name;
-            d_info.Info = $"Do you want buy {tileInfo.Name}\n for {tileInfo.Price}?";
-            d_info.Button1 = "Yes";
-            d_info.Button2 = "No";
+            tileInfo.Owner = player;
+            tileBuilder.SetTileOwnerColor(player.GetPlayerInfo().Color);
         }
+        else
+        {
+            tileInfo.Owner = null;
+            tileBuilder.HideOwnerColorMesh();
+        }
+
+    }
+
+    public DialogInfo OnPlayerAtTile(UnitController player, Board board)
+    {
+        DialogInfo d_info;
+        AtTile atTileEvent = new AtTile();
+        atTileEvent.SetupScript(this, player, board);
+        d_info = atTileEvent.OnPlayerAtTile();
         return d_info;
     }
 }

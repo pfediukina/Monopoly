@@ -49,15 +49,14 @@ public class TileBuilder : MonoBehaviour
         colorMesh.GetComponent<Renderer>().sharedMaterial = tempMaterial;
     }
     
+    public void HideOwnerColorMesh()
+    {
+        ownerMesh.SetActive(false);
+    }
+
     public void SetTileOwnerColor(Color color) // null if nobody
     {
         if (ownerMesh == null) return;
-
-        if(color == null)
-        {
-            ownerMesh.SetActive(false);
-            return;
-        }
 
         ownerMesh.SetActive(true);
         var tempMaterial = new Material(ownerMesh.GetComponent<Renderer>().sharedMaterial);

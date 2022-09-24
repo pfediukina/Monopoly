@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38c813ca27784e44ca221a38b048e050, type: 3}
-  m_Name: ID 1
+  m_Script: {fileID: 11500000, guid: 03e461179da47cc4496bbdf20fd4db05, type: 3}
+  m_Name: ExplUnit
   m_EditorClassIdentifier: 
-  ID: 1
-  Name: OLD KENT ROAD
-  Type: 0
-  Price: 60
-  Color: {r: 0.45490196, g: 0.24684052, b: 0, a: 1}
-  Owner: {fileID: 0}
-  Rent: 000000000000000000000000
+  ID: -1
+  Position: 0
+  Jail: 0
+  Color: {r: 0.754717, g: 0, b: 0, a: 0}
+  PosOffset: {x: 0, y: 0, z: 0}

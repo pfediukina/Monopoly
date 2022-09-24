@@ -11,6 +11,9 @@ public enum DialogStyle
 public enum DialogID
 {
     Rent,
-
+    Buy,
+    Info,
+    Jail,
+    List
 }
 
