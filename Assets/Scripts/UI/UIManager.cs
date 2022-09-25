@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Game")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private DialogBuilder dialogBuilder;
+    [SerializeField] private PlayerStatsUI playerUI;
 
     [Header("Components")]
     [SerializeField] private Button button1;
@@ -62,5 +64,24 @@ public class UIManager : MonoBehaviour
     private void OnPlayerRoll()
     {
         gameManager.OnPlayerRolled();
+    }
+
+    public void UpdatePropertyList(UnitController player, Board board)
+    {
+        List<Tile> tiles = board.GetAllTiles().Where(p => p.GetTileInfo().Owner == player &&
+                                                         p.GetTileInfo().Owner != null).ToList();
+
+        playerUI.UpdatePlayerProperty(tiles);
+    }
+
+    public void UpdatePlayerMoney(int current_money, Color color)
+    {
+        playerUI.UpdatePlayerMoney(current_money);
+        playerUI.SetTextColor(color);
+    }
+
+    public void UpdatePlayerMoney(int start_money, int change_val, int current_money)
+    {
+        playerUI.ChangePlayerMoneyTextWithValue(start_money, change_val, current_money);
     }
 }

@@ -10,12 +10,14 @@ public class AtTile
     private Tile _tile;
     private UnitController _player;
     private Board _board;
+    private CardsInfo _cards;
 
     public void SetupScript(Tile tile, UnitController player, Board board)
     {
         _player = player;
         _tile = tile;
         _board = board;
+        _cards = Resources.FindObjectsOfTypeAll<CardsInfo>().FirstOrDefault();
     }
 
     public DialogInfo OnPlayerAtTile()
@@ -25,6 +27,7 @@ public class AtTile
             _tile.GetTileInfo().Type == TileType.Station || _tile.GetTileInfo().Type == TileType.Company))
         {
             d_info = ReturnBuyDialog();
+            tile_rent = _tile.GetTileInfo().Price * -1;
             return d_info;
         }
 
@@ -49,12 +52,11 @@ public class AtTile
             case TileType.Company:
                 d_info = OnPlayerAtCompanyTile();
                 break;
-            //case TileType.Chance:
-            //    break;
-            //case TileType.Chest:
-            //    break;
-            case TileType.Start:
-                d_info = OnPlayerAtStart();
+            case TileType.Chance:
+                d_info = OnPlayerAtCard();
+                break;
+            case TileType.Chest:
+                d_info = OnPlayerAtCard();
                 break;
             case TileType.CornerTax:
                 d_info = OnPlayerAtTax();
@@ -66,9 +68,33 @@ public class AtTile
                 d_info = OnPlayerAtJail();
                 break;
             default:
-                d_info = new DialogInfo();
+                d_info = OnPlayerAtStart();
                 break;
         }
+        return d_info;
+    }
+
+    private DialogInfo OnPlayerAtCard()
+    {
+        DialogInfo d_info = new DialogInfo();
+
+        bool is_chance = _tile.GetTileInfo().Type == TileType.Chance ? true : false;
+        int cardID = Random.Range(0, is_chance ? _cards.Chances.Count : _cards.Chests.Count);
+        CardInfo card = is_chance ? _cards.Chances[cardID] : _cards.Chests[cardID];
+        d_info.Info = card.Desc;
+        d_info.Button1 = "OK";
+        d_info.Button2 = "";
+        if (card.Type == CardType.Position)
+        {
+            _player.MovePlayerToTile(_board.GetAllTiles()[card.Value]);
+            d_info.ID = DialogID.Chance;
+        }
+        else
+        {
+            tile_rent = card.Value;
+            d_info.ID = DialogID.Chest;
+        }
+
         return d_info;
     }
 
@@ -96,6 +122,7 @@ public class AtTile
         d_info.ID = DialogID.Rent;
         d_info.Button1 = "OK";
         d_info.Button2 = "";
+        tile_rent *= -1;
         return d_info;
     }
 
@@ -118,7 +145,7 @@ public class AtTile
         d_info.ID = DialogID.Rent;
         d_info.Button1 = "OK";
         d_info.Button2 = "";
-
+        tile_rent *= -1;
         return d_info;
     }
 
@@ -130,6 +157,8 @@ public class AtTile
         if (_tile.GetTileInfo().Type == TileType.Tax)
         {
             d_info.Info = $"You have paid a tax ({_tile.GetTileInfo().Price}).";
+
+            d_info.ID = DialogID.Rent;
             tile_rent = _tile.GetTileInfo().Price;
         }
         else
@@ -138,14 +167,22 @@ public class AtTile
                                                         p.GetTileInfo().Owner != null)).Count();
             tile_rent = count * _tile.GetTileInfo().Price;
             if (count == 0)
+            {
                 d_info.Info = $"You don't have any property. You don't pay a tax.";
+
+                d_info.ID = DialogID.Info;
+            }
             else
+            {
                 d_info.Info = $"You have paid a tax ({count} * {_tile.GetTileInfo().Price}). That's equal to {tile_rent}";
+
+                d_info.ID = DialogID.Rent;
+            }
         }
 
-        d_info.ID = DialogID.Rent;
         d_info.Button1 = "OK";
         d_info.Button2 = "";
+        tile_rent *= -1;
         return d_info;
     }
 

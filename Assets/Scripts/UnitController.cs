@@ -75,9 +75,23 @@ public class UnitController : MonoBehaviour
         unitCamera.gameObject.SetActive(active);
     }
 
+    public bool AddPlayerMoney(int value)
+    {
+        int new_money = unitInfo.Money += value;
+        if (new_money <= 0) return false;
+        unitInfo.Money = new_money;
+        return true;
+    }
+
+    public void HidePlayer()
+    {
+        unitMesh.gameObject.SetActive(false);
+    }
+
     private void ResetPlayerInfo()
     {
         unitInfo.Jail = examplaryInfo.Jail;
+       // unitInfo.Money = examplaryInfo.Money;
     }
 
 }

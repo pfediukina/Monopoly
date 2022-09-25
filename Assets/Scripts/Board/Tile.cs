@@ -72,6 +72,7 @@ public class Tile : MonoBehaviour
         AtTile atTileEvent = new AtTile();
         atTileEvent.SetupScript(this, player, board);
         d_info = atTileEvent.OnPlayerAtTile();
+        tile_rent = atTileEvent.tile_rent;
         return d_info;
     }
 }

@@ -14,6 +14,9 @@ public enum DialogID
     Buy,
     Info,
     Jail,
-    List
+    List,
+    Chance,
+    Chest,
+    Bankrupt
 }
 
