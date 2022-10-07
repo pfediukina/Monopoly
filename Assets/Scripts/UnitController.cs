@@ -37,13 +37,16 @@ public class UnitController : MonoBehaviour
 
     public void Init()
     {
+        SetPlayerColor();
+        ResetPlayerInfo();
+        MovePlayerToTile(board.GetAllTiles()[0]); // reset player position
+    }
 
+    public void SetPlayerColor()
+    {
         var tempMaterial = new Material(unitMesh.GetComponent<Renderer>().sharedMaterial);
         tempMaterial.color = unitInfo.Color;
         unitMesh.GetComponent<Renderer>().sharedMaterial = tempMaterial;
-        ResetPlayerInfo();
-
-        MovePlayerToTile(board.GetAllTiles()[0]); // reset player position
     }
 
     public UnitInfo GetPlayerInfo()
@@ -91,7 +94,7 @@ public class UnitController : MonoBehaviour
     private void ResetPlayerInfo()
     {
         unitInfo.Jail = examplaryInfo.Jail;
-       // unitInfo.Money = examplaryInfo.Money;
+        unitInfo.Money = examplaryInfo.Money;
     }
 
 }

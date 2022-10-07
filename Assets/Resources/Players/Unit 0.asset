@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Unit 0
   m_EditorClassIdentifier: 
   ID: 0
-  Position: 1
+  Position: 3
   Jail: 0
-  Money: 1480
+  Money: 1440
   Color: {r: 0.754717, g: 0, b: 0, a: 0}
   PosOffset: {x: 0, y: 0, z: 0.5}

@@ -17,6 +17,8 @@ public enum DialogID
     List,
     Chance,
     Chest,
-    Bankrupt
+    Bankrupt,
+    Sell,
+    Winner
 }
 

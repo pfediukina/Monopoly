@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
     //1 for left button and 0 for right button (if only one button shown, always 1)
     public void OnDialogResponse(DialogID dialog_id, bool responce)
     {
-        UIManager.HidePlayerDialog();
+        UIManager.HideDialogs();
 
         if (dialog_id == DialogID.Buy)
         {
@@ -65,8 +66,8 @@ public class GameManager : MonoBehaviour
             Tile tile = board.GetAllTiles()[_currentPlayer.GetPlayerInfo().Position];
             if(tile.GetTileInfo().Owner != null)
                 tile.GetTileInfo().Owner.AddPlayerMoney(Mathf.Abs(tile.GetPlayerRent()));
-            CheckPlayerMoney();
-            //ChangePlayer();
+            if(_currentPlayer.GetPlayerInfo().Money > 0)
+                ChangePlayer();
         }
 
         if (dialog_id == DialogID.Info)
@@ -105,8 +106,43 @@ public class GameManager : MonoBehaviour
             ChangePlayer();
             lost_player.HidePlayer();
         }
-    }
+        if(dialog_id == DialogID.List)
+        {
+            if(responce)
+            {
+                List<Tile> list = UIManager.GetList().GetCheckedList();
+                int money = 0;
+                foreach(Tile tile in list)
+                {
+                    money += tile.GetTileInfo().Price / 2;
+                    tile.SetOwner(null);
+                    if (_currentPlayer.GetPlayerInfo().Money > 0)
+                        UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Sell, "PROPERTY", "You selled property", "OK", "");
+                    else
+                        UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Info, "PROPERTY", "You selled property", "OK", "");
+                }
+                UIManager.UpdatePlayerMoney(_currentPlayer.GetPlayerInfo().Money, money, _currentPlayer.GetPlayerInfo().Money + money);
+                _currentPlayer.GetPlayerInfo().Money += money;
+            }
+            else
+            {
+                if (_currentPlayer.GetPlayerInfo().Money <= 0)
+                {
+                    UIManager.HideDialogs();
+                    UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Bankrupt, "BANKRUPT", "You lost!", "OK :c", "");
+                }
+            }
+        }
 
+        if(dialog_id == DialogID.Winner)
+        {
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+            return;
+        }
+
+        if(dialog_id != DialogID.List)
+            CheckPlayerMoney();
+    }
 
     public void CheckPlayerMoney()
     {
@@ -121,16 +157,17 @@ public class GameManager : MonoBehaviour
             }
             if (property_price <= Mathf.Abs(_currentPlayer.GetPlayerInfo().Money))
             {
+                UIManager.HideDialogs();
                 UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Bankrupt, "BANKRUPT", "You dont have money!", "OK :c", "");
                 foreach (var p in player_property)
                 {
                     p.SetOwner(null);
                 }
             }
-        }
-        else
-        {
-            ChangePlayer();
+            else
+            {
+                UIManager.OnPlayerList();
+            }
         }
     }
 
@@ -139,16 +176,21 @@ public class GameManager : MonoBehaviour
         int num1 = Random.Range(1, 7);
         int num2 = Random.Range(1, 7);
         int sum = num1 + num2;
+
         if(textStep.text != "0")
         {
             int.TryParse(textStep.text, out sum);
         }
+
         if(_currentPlayer.GetPlayerInfo().Jail == 0)
         {
+            if (_currentPlayer.GetPlayerInfo().Position + sum >= 40)
+                _currentPlayer.AddPlayerMoney(200);
             _currentPlayer.MovePlayerWithStep(sum);
         }
         DialogInfo dialog_info = board.GetAllTiles()[_currentPlayer.GetPlayerInfo().Position].OnPlayerAtTile(_currentPlayer, board);
         UIManager.ShowPlayerDialog(_currentPlayer, dialog_info.ID, dialog_info.Caption, dialog_info.Info, dialog_info.Button1, dialog_info.Button2);
+        
         
         if (dialog_info.ID == DialogID.Rent || dialog_info.ID == DialogID.Chest)
         {
@@ -158,6 +200,16 @@ public class GameManager : MonoBehaviour
             UIManager.UpdatePlayerMoney(start_money, t.GetPlayerRent(), _currentPlayer.GetPlayerInfo().Money);
         }
 
+    }
+
+    public UnitController GetCurrentPlayer()
+    {
+        return _currentPlayer;
+    }
+    public List<Tile> GetPlayerProperty(UnitController player)
+    {
+        List<Tile> tiles = board.GetAllTiles().Where(p => p.GetTileInfo().Owner != null && p.GetTileInfo().Owner == player).ToList();
+        return tiles;
     }
 
     private void ChangePlayer()
@@ -178,7 +230,7 @@ public class GameManager : MonoBehaviour
 
         if (_players.Where(p => p.GetPlayerInfo().Money > 0).Count() == 1)
         {
-            UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Info, "WINNER", "Winner Winner Chicken Dinner!", ":D", "");
+            UIManager.ShowPlayerDialog(_currentPlayer, DialogID.Winner, "WINNER", "Winner Winner Chicken Dinner!", ":D", "");
             return;
         }
 
