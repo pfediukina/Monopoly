@@ -14,32 +14,28 @@ public class UnitController : MonoBehaviour
     [SerializeField] private GameObject unitMesh;
     [SerializeField] private Camera unitCamera;
 
-    //[Header("Test")]
-    //[SerializeField] private int playerPos = -1;
-    //[SerializeField] private bool update = false;
-
-
+    [Header("Test")]
+    [SerializeField] private int playerPos = -1;
+    [SerializeField] private bool update = false;
 
 
     void Update()
     {
-        //if (playerPos != -1)
-        //{
-        //    MovePlayerWithStep(playerPos);
-        //    playerPos = -1;
-        //}   
-        //if(update)
-        //{
-        //    update = false;
-        //    Init();
-        //}    
+        if(GameSettings.testMode && update)
+        {
+            update = false;
+            MovePlayerToTile(playerPos);
+            Init();
+        }
     }
+
+    public UnitInfo GetPlayerInfo() => unitInfo;
 
     public void Init()
     {
         SetPlayerColor();
         ResetPlayerInfo();
-        MovePlayerToTile(board.GetAllTiles()[0]); // reset player position
+        MovePlayerToTile(0);
     }
 
     public void SetPlayerColor()
@@ -49,17 +45,13 @@ public class UnitController : MonoBehaviour
         unitMesh.GetComponent<Renderer>().sharedMaterial = tempMaterial;
     }
 
-    public UnitInfo GetPlayerInfo()
+    public void MovePlayerToTile(int tileID)
     {
-        return unitInfo;
-    }
-
-    public void MovePlayerToTile(Tile tile)
-    {
+        BaseTile tile = board.GetTileByID(tileID);
         Vector3 tile_pos = tile.transform.position;
         tile_pos.y = transform.position.y;
         transform.position = tile_pos + unitInfo.PosOffset;
-        unitInfo.Position = tile.GetTileInfo().ID;
+        unitInfo.Position = tile.tileInfo.ID;
         Vector3 player_rot = new Vector3(0, 0, 0);
         player_rot.y = (unitInfo.Position / 10) * 90;
         transform.eulerAngles = player_rot;
@@ -69,10 +61,9 @@ public class UnitController : MonoBehaviour
     {
         if (board.GetAllTiles().Count == 0) return;
         int new_pos = (unitInfo.Position + step) % board.GetAllTiles().Count;
-        Debug.Log(unitInfo.Position + step + "/" + new_pos);
-        Tile new_tile = board.GetAllTiles()[new_pos];
-        MovePlayerToTile(new_tile);
+        MovePlayerToTile(new_pos);
     }
+
     public void SetPlayerActive(bool active)
     {
         unitCamera.gameObject.SetActive(active);

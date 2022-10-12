@@ -28,13 +28,13 @@ public class PlayerStatsUI : MonoBehaviour
         playerMoney.color = c;
     }
 
-    public void UpdatePlayerProperty(List<Tile> tiles)
+    public void UpdatePlayerProperty(List<BaseTile> tiles)
     {
         string props = "";
-        foreach(Tile t in tiles)
+        foreach(BaseTile t in tiles)
         {
-            string color = ColorUtility.ToHtmlStringRGB(t.GetTileInfo().Color);
-            props += $"<color=#{color}> ? </color> {t.GetTileInfo().Name}\n";
+            string color = ColorUtility.ToHtmlStringRGB(t.tileInfo.Color);
+            props += $"<color=#{color}> ? </color> {t.tileInfo.Name}\n";
         }
         propertyList.text = props;
     }

@@ -14,17 +14,17 @@ public class TileBuilder : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float nameOffset;
 
-    public void SetTileName(string name, bool is_colored)
+    public void SetTileName(string name)
     {
         if (nameText == null) return;
-
         nameText.text = name;
-        if (!is_colored)
-        {
-            Vector3 name_pos = nameText.transform.localPosition;
-            name_pos.z += nameOffset;
-            nameText.transform.localPosition = name_pos;
-        }
+    }
+
+    public void SetNameOffset()
+    {
+        Vector3 name_pos = nameText.transform.localPosition;
+        name_pos.z += nameOffset;
+        nameText.transform.localPosition = name_pos;
     }
 
     public void SetTilePrice(int price)
@@ -34,15 +34,10 @@ public class TileBuilder : MonoBehaviour
         priceText.SetText(Mathf.Abs(price).ToString());
     }
 
-    public void SetTileColor(Color color, bool is_colored = true) 
+    public void SetTileColor(Color color) 
     {
         if (colorMesh == null) return;
 
-        if (!is_colored)
-        {
-            colorMesh.SetActive(false);
-            return;
-        }
         colorMesh.SetActive(true);
         var tempMaterial = new Material(colorMesh.GetComponent<Renderer>().sharedMaterial);
         tempMaterial.color = color;
@@ -54,10 +49,9 @@ public class TileBuilder : MonoBehaviour
         ownerMesh.SetActive(false);
     }
 
-    public void SetTileOwnerColor(Color color) // null if nobody
+    public void SetTileOwnerColor(Color color) 
     {
-        if (ownerMesh == null) return;
-
+        if (ownerMesh == null)
         ownerMesh.SetActive(true);
         var tempMaterial = new Material(ownerMesh.GetComponent<Renderer>().sharedMaterial);
         tempMaterial.color = color;

@@ -4,9 +4,8 @@ using UnityEngine;
 
 public struct DialogInfo
 {
-    public DialogID ID;
-    public string Caption;
-    public string Info;
+    public string Title;
+    public string Desc;
     public string Button1;
     public string Button2;
 }

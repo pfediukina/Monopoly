@@ -5,7 +5,7 @@ using UnityEngine;
 
 public struct ListElement
 {
-    public Tile tile;
+    public BaseTile tile;
     public GameObject obj;
     public Toggle toggle;
 }
